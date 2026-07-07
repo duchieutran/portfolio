@@ -36,6 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^4.11.0
 
+  # ===== Error Handling System =====
+  path_provider: ^2.1.0  # Lấy thư mục app (lưu file log)
+  path: ^1.8.3          # Nối đường dẫn đa nền tảng
+  intl: ^0.19.0         # Format ngày/giờ cho log
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
