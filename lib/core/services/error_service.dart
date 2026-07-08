@@ -1,32 +1,45 @@
-/// Service xử lý lỗi tập trung — single sink cho mọi lỗi trong app.
-///
-/// API public:
-/// - [initGlobalErrorHandler] — gọi 1 lần trong main(), trước runApp().
-/// - [record] — gọi khi business code muốn log lỗi.
-///
-/// Mọi thao tác ghi file đều đi qua [_queue] để tránh race condition.
-class ErrorService {
-  /// Tài liệu đọc hiểu:
-  /// Trong Flutter về cơ bản có 4 loại nguồn lỗi khác nhau, mỗi nguồn cần có một cơ chế bắt lỗi riêng để bắt lỗi riêng.
-  /// 4 nguồn khác nhau bao gồm:
-  /// - UI/Build (Lỗi được bắt trong hàm build(), layout, paint.):
-  ///     + Sử dụng -> Flutter.onError
-  /// - Native platform (App bị crash từ native code (Java, Kotlin, Swift) đẩy lên)
-  ///     + Sử dụng -> PlatformDispatcher.instance.onError
-  /// - Background isolate (Lỗi trong compute() hoặc isolate khác):
-  ///     + Sử dụng -> Isolate.current.addErrorListener
-  /// - Async ngoài zone (Future lỗi không ai await/catch):
-  ///     + Sử dụng runZonedGuarded
+import 'dart:async';
 
+import 'package:flutter/material.dart';
+
+/// Dịch vụ xử lý lỗi toàn cục của ứng dụng.
+///
+/// Cung cấp cơ chế bắt và xử lý các lỗi phát sinh trong quá trình
+/// ứng dụng chạy, bao gồm cả những lỗi bất đồng bộ (async) mà
+/// Flutter framework không thể tự đón bắt được.
+class ErrorService {
+  // Constructor riêng tư để ngăn việc tạo instance từ bên ngoài,
+  // đảm bảo ErrorService hoạt động theo mô hình singleton.
   ErrorService._();
 
-  static const List<String> _excludedErrors = <String>[];
-
-  static bool _isExcluded(String message) {
-    return _excludedErrors.any((pattern) => message.contains(pattern));
+  /// Khởi tạo bộ xử lý lỗi toàn cục và chạy ứng dụng bên trong nó.
+  ///
+  /// Phương thức này bọc [app] trong một [runZonedGuarded] zone, giúp
+  /// chặn và xử lý mọi lỗi không mong muốn trong suốt vòng đời ứng dụng:
+  ///
+  /// - [WidgetsFlutterBinding.ensureInitialized] đảm bảo Flutter binding
+  ///   đã sẵn sàng trước khi gọi [app].
+  /// - Khi có lỗi xảy ra, [FlutterError.presentError] sẽ chuyển lỗi tới
+  ///   bộ xử lý mặc định của Flutter để hiển thị hoặc ghi log.
+  ///
+  /// Tham số:
+  /// - [app]: Hàm khởi chạy ứng dụng (ví dụ: `runApp`).
+  static Future<void> initGlobalErrorHandler(
+    Future<void> Function() app,
+  ) async {
+    return runZonedGuarded<Future<void>>(
+      () async {
+        // Đảm bảo Flutter binding đã được khởi tạo trước khi chạy ứng dụng.
+        WidgetsFlutterBinding.ensureInitialized();
+        await app();
+      },
+      // Hàm callback được gọi khi phát hiện lỗi không đồng bộ trong zone.
+      (error, stack) {
+        // Chuyển lỗi tới bộ xử lý lỗi mặc định của Flutter.
+        FlutterError.presentError(
+          FlutterErrorDetails(exception: error, stack: stack),
+        );
+      },
+    );
   }
-
-  static 
-
-  
 }
