@@ -5,6 +5,21 @@ class TabHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(12),
+          child: Column(
+            children: [
+              // header
+              Container(
+                
+              )
+              // body
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

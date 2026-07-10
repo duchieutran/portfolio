@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/presentation/home/tab_home.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -11,7 +12,8 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Placeholder(),
+      debugShowCheckedModeBanner: false,
+      home: TabHome(),
     );
   }
 }
