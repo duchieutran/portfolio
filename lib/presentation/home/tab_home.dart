@@ -12,8 +12,8 @@ class TabHome extends StatelessWidget {
           child: Column(
             children: [
               // header
-              Container(
-                
+              Center(
+                child: Text("Hieu"),
               )
               // body
             ],
