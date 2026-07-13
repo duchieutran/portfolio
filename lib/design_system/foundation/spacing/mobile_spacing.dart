@@ -1,6 +1,9 @@
 import 'package:portfolio/design_system/foundation/spacing/app_spacing.dart';
 
 class MobileSpacing extends AppSpacing {
+
+  const MobileSpacing();
+
   @override
   double get lg => 24;
 

@@ -1,6 +1,8 @@
 import 'package:portfolio/design_system/foundation/spacing/app_spacing.dart';
 
 class DesktopSpacing extends AppSpacing {
+  const DesktopSpacing();
+
   @override
   double get lg => 24;
 

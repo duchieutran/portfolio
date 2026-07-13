@@ -1,4 +1,6 @@
 abstract class AppSpacing {
+  const AppSpacing();
+
   /// Không có khoảng cách.
   double get none;
 
