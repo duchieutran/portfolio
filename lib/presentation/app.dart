@@ -10,11 +10,11 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      // darkTheme: AppTheme.dark,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
-      
+
       // home: TabHome(),
     );
   }

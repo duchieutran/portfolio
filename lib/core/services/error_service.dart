@@ -47,15 +47,21 @@ class ErrorService {
         WidgetsFlutterBinding.ensureInitialized();
 
         // 3. ASYNC/ FUTURE/ STREAM
-        Isolate.current.addErrorListener(
-          RawReceivePort((dynamic pair) {
-            final list = pair as List<dynamic>;
-            final error = list[0];
-            final stackStr = list.length > 1 ? list[1] as String : '';
-            _logError(
-                'Isolate', error ?? 'Unknown', StackTrace.fromString(stackStr));
-          }).sendPort,
-        );
+        if (!kIsWeb) {
+          Isolate.current.addErrorListener(
+            RawReceivePort((dynamic pair) {
+              final list = pair as List<dynamic>;
+              final error = list[0];
+              final stackStr = list.length > 1 ? list[1] as String : '';
+
+              _logError(
+                'Isolate',
+                error ?? 'Unknown',
+                StackTrace.fromString(stackStr),
+              );
+            }).sendPort,
+          );
+        }
 
         await app();
       },
