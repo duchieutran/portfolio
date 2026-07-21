@@ -14,8 +14,6 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
-
-      // home: TabHome(),
     );
   }
 }
